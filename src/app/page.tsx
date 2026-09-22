@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { FaqList } from "@/components/faq/faq-list";
+import { HeroPreview } from "@/components/home/hero-preview";
 import { ToolGrid } from "@/components/tools/tool-grid";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { faqGroups } from "@/lib/faq/entries";
+import { STANDARD_OPTIONS } from "@/lib/audit-agent/presets";
 import { plans } from "@/lib/pricing/plans";
 import { siteConfig } from "@/lib/site";
 import { getRunnableTools, tools } from "@/lib/tools/registry";
@@ -15,15 +17,25 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-/** The categories the Website Audit Agent scores, shown as concrete proof of depth. */
+/** What a Standard Audit actually exercises, per the audit worker's contract. */
 const auditCoverage = [
-  { name: "SEO & metadata", detail: "Title, description, canonical, Open Graph, indexability" },
-  { name: "Content & structure", detail: "Heading hierarchy and readable content volume" },
-  { name: "Accessibility", detail: "Language, image alternatives, form labels, landmarks" },
-  { name: "Technical & security", detail: "HTTPS, redirects, document size, blocking scripts" },
-  { name: "Links", detail: "Internal linking, descriptive text, new-tab safety" },
-  { name: "Images", detail: "Explicit dimensions, lazy loading, responsive sources" },
-  { name: "Mobile readiness", detail: "Viewport configuration, pinch zoom, fixed widths" },
+  { name: "Page discovery", detail: `Crawls and audits up to ${STANDARD_OPTIONS.max_pages} public pages` },
+  { name: "Lighthouse", detail: "Performance, accessibility, SEO and best practices per page" },
+  { name: "Responsive testing", detail: "Real browser rendering across viewport sizes" },
+  { name: "Accessibility", detail: "Automated checks run against the rendered page" },
+  { name: "Link checking", detail: "Internal links plus a configurable external budget" },
+  { name: "Evidence", detail: "Findings carry the page and proof they came from" },
+  { name: "Reports", detail: "PDF, HTML and JSON artifacts when the worker publishes them" },
+] as const;
+
+/** Lighthouse reports these four categories; kept in step with the hero panel. */
+const lighthouseCategoryCount = 4;
+
+/** The three things the platform does, summarised for the hero. */
+const capabilities = [
+  { label: "Audit", detail: "Crawl a site in a real browser and see what is broken." },
+  { label: "Prospect", detail: "Find, verify and score qualified leads from public sources." },
+  { label: "Automate", detail: "Scheduled runs and change alerts — in development." },
 ] as const;
 
 const howItWorks = [
@@ -63,43 +75,74 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="border-b border-line bg-surface">
-        <Container width="wide" className="py-16 sm:py-24 lg:py-28">
-          <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">Code Nativex Tools</p>
-            <h1 className="mt-4 text-[2rem] font-semibold leading-[1.1] tracking-tight sm:text-5xl lg:text-[3.5rem]">
-              {siteConfig.tagline}
-            </h1>
-            <p className="mt-5 max-w-2xl text-base leading-relaxed text-ink-muted sm:text-lg">
-              A working toolkit for developers, agencies, marketers and site owners: audit a site, generate the markup
-              you keep rewriting, and put the repetitive parts of the job on rails. Free to start, no account needed.
-            </p>
+      <section className="overflow-hidden border-b border-line bg-surface">
+        <Container width="wide" className="py-14 sm:py-20 lg:py-24">
+          <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-16">
+            <div className="max-w-2xl">
+              <p className="inline-flex items-center gap-2 rounded-full border border-sand-line bg-sand-soft px-3 py-1 text-xs font-medium text-ink">
+                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-positive" />
+                Tools and automation platform · {liveTools.length} live, {upcomingTools.length} in development
+              </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href="/tools/website-audit" size="lg">
-                Run a website audit
-              </ButtonLink>
-              <ButtonLink href="/tools" variant="secondary" size="lg">
-                Browse all {tools.length} tools
-              </ButtonLink>
+              <h1 className="mt-5 text-[2.125rem] font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.25rem]">
+                {siteConfig.tagline}
+              </h1>
+
+              <p className="mt-5 text-base leading-relaxed text-ink-muted sm:text-lg">
+                Code Nativex Tools is where the repetitive parts of building and growing a website get automated.
+                Crawl a site in a real browser and run Lighthouse, accessibility, responsive and link checks across
+                every page it finds — or put an agent to work sourcing and scoring qualified leads.
+              </p>
+
+              <ul className="mt-7 grid gap-4 sm:grid-cols-3">
+                {capabilities.map((capability) => (
+                  <li key={capability.label} className="border-t border-line pt-3">
+                    <p className="text-sm font-semibold text-ink">{capability.label}</p>
+                    <p className="mt-1 text-sm leading-snug text-ink-muted">{capability.detail}</p>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <ButtonLink href="/tools/website-audit" size="lg">
+                  Run a website audit
+                </ButtonLink>
+                <ButtonLink href="/tools" variant="secondary" size="lg">
+                  Browse all {tools.length} tools
+                </ButtonLink>
+              </div>
+
+              <p className="mt-4 text-sm text-ink-subtle">
+                Free to start · No account required · Results in seconds
+              </p>
             </div>
 
-            <dl className="mt-12 grid max-w-xl grid-cols-2 gap-6 border-t border-line pt-8 sm:grid-cols-4">
-              {[
-                { label: "Tools you can run now", value: String(liveTools.length) },
-                { label: "In the catalogue", value: String(tools.length) },
-                { label: "Audit categories", value: String(auditCoverage.length) },
-                // Checks that cannot apply are skipped, so this is the ceiling, not a fixed count.
-                { label: "Max checks per audit", value: "26" },
-              ].map((stat) => (
-                // Reversed so the figures share a baseline when a label wraps.
-                <div key={stat.label} className="flex flex-col-reverse gap-1">
-                  <dt className="text-xs leading-snug text-ink-subtle">{stat.label}</dt>
-                  <dd className="font-mono text-2xl font-semibold tabular-nums text-ink">{stat.value}</dd>
-                </div>
-              ))}
-            </dl>
+            <div className="relative lg:pl-4">
+              {/* Warm band behind the panel, bleeding off the right edge. */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -inset-y-10 left-[-2.5rem] right-[-50vw] hidden bg-sand-soft lg:block"
+              />
+              <div className="relative">
+                <HeroPreview />
+              </div>
+            </div>
           </div>
+
+          <dl className="mt-14 grid grid-cols-2 gap-6 border-t border-line pt-8 sm:grid-cols-4 lg:mt-16">
+            {[
+              { label: "Tools you can run now", value: String(liveTools.length) },
+              { label: "In the catalogue", value: String(tools.length) },
+              { label: "Pages per standard audit", value: String(STANDARD_OPTIONS.max_pages) },
+              { label: "Lighthouse categories", value: String(lighthouseCategoryCount) },
+            ].map((stat) => (
+              // Reversed so the figures share a baseline when a label wraps.
+              <div key={stat.label} className="flex flex-col-reverse gap-1">
+                <dt className="text-xs leading-snug text-ink-subtle">{stat.label}</dt>
+                <dd className="font-mono text-2xl font-semibold tabular-nums text-ink sm:text-3xl">{stat.value}</dd>
+              </div>
+            ))}
+          </dl>
         </Container>
       </section>
 
@@ -116,7 +159,7 @@ export default function HomePage() {
       </Container>
 
       {/* How it works */}
-      <section className="border-y border-line bg-surface">
+      <section className="border-y border-line bg-sand-soft">
         <Container width="wide" className="py-16 sm:py-20">
           <SectionHeading
             eyebrow="How it works"
@@ -141,8 +184,8 @@ export default function HomePage() {
       <Container width="wide" className="py-16 sm:py-20">
         <SectionHeading
           eyebrow="Inside the Website Audit Agent"
-          title="Seven categories, up to 26 checks, every finding evidenced"
-          description="Scores are reproducible: a pass counts full, a warning half, an issue nothing. No weighting, no curve."
+          title="A real crawl, in a real browser, with the evidence attached"
+          description={`A Standard Audit discovers up to ${STANDARD_OPTIONS.max_pages} pages and runs Lighthouse on every one of them. Progress reflects the worker\u2019s actual stage — no invented percentages.`}
           action={
             <ButtonLink href="/learning/website-audit" variant="secondary">
               How the audit works
@@ -210,7 +253,7 @@ export default function HomePage() {
       </Container>
 
       {/* Principles */}
-      <section className="border-y border-line bg-surface">
+      <section className="border-y border-line bg-sand-soft">
         <Container width="wide" className="py-16 sm:py-20">
           <SectionHeading
             eyebrow="How we build"

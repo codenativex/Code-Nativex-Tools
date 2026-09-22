@@ -7,9 +7,9 @@ export type BadgeTone = "neutral" | "accent" | "positive" | "caution" | "critica
 const tones: Record<BadgeTone, string> = {
   neutral: "border-line bg-surface-muted text-ink-muted",
   accent: "border-accent/25 bg-accent-soft text-accent",
-  positive: "border-positive/25 bg-positive/10 text-positive",
-  caution: "border-caution/30 bg-caution/10 text-[oklch(0.5_0.12_75)]",
-  critical: "border-critical/25 bg-critical/10 text-critical",
+  positive: "border-positive/25 bg-positive/10 text-positive-ink",
+  caution: "border-caution/30 bg-caution/10 text-caution-ink",
+  critical: "border-critical/25 bg-critical/10 text-critical-ink",
 };
 
 interface BadgeProps {

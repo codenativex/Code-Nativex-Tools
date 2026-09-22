@@ -11,7 +11,7 @@ export function Logo() {
     >
       <span
         aria-hidden="true"
-        className="grid h-8 w-8 place-items-center rounded-lg bg-ink text-[0.8125rem] font-bold tracking-tight text-white"
+        className="grid h-8 w-8 place-items-center rounded-lg bg-accent text-[0.8125rem] font-bold tracking-tight text-white"
       >
         CN
       </span>

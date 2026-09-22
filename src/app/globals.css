@@ -1,27 +1,47 @@
 @import "tailwindcss";
 
 /*
- * Design tokens. Everything visual in the app resolves to a token here so that
- * theming stays centralised and components never hard-code raw colour values.
+ * Design tokens.
+ *
+ * Brand palette:
+ *   #1b4965  deep marine  — primary actions, links, emphasis
+ *   #f0edee  warm paper   — page canvas
+ *   #e7d7c1  sand         — secondary accent and highlight surfaces
+ *
+ * Everything visual resolves to a token here, so theming stays centralised and
+ * components never hard-code a raw colour. Text tokens are chosen to clear
+ * WCAG AA (4.5:1) against both the canvas and surface backgrounds.
  */
 @theme {
-  --color-canvas: oklch(0.99 0.002 260);
-  --color-surface: oklch(1 0 0);
-  --color-surface-muted: oklch(0.975 0.003 260);
-  --color-line: oklch(0.915 0.005 260);
-  --color-line-strong: oklch(0.85 0.008 260);
+  /* Surfaces */
+  --color-canvas: #f0edee;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f7f4f3;
+  --color-line: #ddd7d6;
+  --color-line-strong: #c4bdbb;
 
-  --color-ink: oklch(0.21 0.012 265);
-  --color-ink-muted: oklch(0.505 0.014 265);
-  --color-ink-subtle: oklch(0.63 0.012 265);
+  /* Text — ink 9.8:1, muted 6.8:1, subtle 5.0:1 on canvas */
+  --color-ink: #12303f;
+  --color-ink-muted: #3c5464;
+  --color-ink-subtle: #556875;
 
-  --color-accent: oklch(0.55 0.17 258);
-  --color-accent-hover: oklch(0.49 0.17 258);
-  --color-accent-soft: oklch(0.96 0.02 258);
+  /* Primary */
+  --color-accent: #1b4965;
+  --color-accent-hover: #133547;
+  --color-accent-soft: #e6edf1;
 
-  --color-positive: oklch(0.58 0.14 152);
-  --color-caution: oklch(0.72 0.15 75);
-  --color-critical: oklch(0.58 0.19 25);
+  /* Secondary accent */
+  --color-sand: #e7d7c1;
+  --color-sand-soft: #f4ece1;
+  --color-sand-line: #d8c4a8;
+
+  /* Status. The `-ink` variants are the text-safe pair for each. */
+  --color-positive: #2f6b4f;
+  --color-positive-ink: #2a5f47;
+  --color-caution: #b5792a;
+  --color-caution-ink: #8a5716;
+  --color-critical: #a8372f;
+  --color-critical-ink: #97302a;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;

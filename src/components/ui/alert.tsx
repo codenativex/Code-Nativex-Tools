@@ -6,8 +6,8 @@ type AlertTone = "info" | "warn" | "error";
 
 const tones: Record<AlertTone, string> = {
   info: "border-line bg-surface-muted text-ink-muted",
-  warn: "border-caution/35 bg-caution/10 text-[oklch(0.45_0.11_75)]",
-  error: "border-critical/30 bg-critical/8 text-critical",
+  warn: "border-caution/35 bg-caution/10 text-caution-ink",
+  error: "border-critical/30 bg-critical/8 text-critical-ink",
 };
 
 interface AlertProps {

@@ -25,7 +25,7 @@ export function CodeOutputView({ output }: { readonly output: CodeOutputResult }
               className={cn(
                 "rounded-lg border px-4 py-3 text-sm leading-relaxed",
                 note.status === "warn"
-                  ? "border-caution/35 bg-caution/10 text-[oklch(0.45_0.11_75)]"
+                  ? "border-caution/35 bg-caution/10 text-caution-ink"
                   : "border-line bg-surface-muted text-ink-muted",
               )}
             >

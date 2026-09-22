@@ -25,7 +25,7 @@ interface FindingPresentation {
 
 /** One place that decides how each finding status looks and reads. */
 export const findingMeta: Record<FindingStatus, FindingPresentation> = {
-  pass: { label: "Passed", symbol: "✓", markerClass: "border-positive/30 bg-positive/10 text-positive" },
-  warn: { label: "Warning", symbol: "!", markerClass: "border-caution/40 bg-caution/15 text-[oklch(0.5_0.12_75)]" },
-  fail: { label: "Issue", symbol: "×", markerClass: "border-critical/30 bg-critical/10 text-critical" },
+  pass: { label: "Passed", symbol: "✓", markerClass: "border-positive/30 bg-positive/10 text-positive-ink" },
+  warn: { label: "Warning", symbol: "!", markerClass: "border-caution/40 bg-caution/15 text-caution-ink" },
+  fail: { label: "Issue", symbol: "×", markerClass: "border-critical/30 bg-critical/10 text-critical-ink" },
 };

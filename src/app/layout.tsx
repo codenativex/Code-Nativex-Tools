@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#ffffff",
+  themeColor: "#f0edee",
 };
 
 export default function RootLayout({ children }: { readonly children: ReactNode }) {
@@ -48,7 +48,7 @@ export default function RootLayout({ children }: { readonly children: ReactNode 
       <body className="flex min-h-dvh flex-col" cz-shortcut-listen="true">
         <a
           href="#main"
-          className="sr-only-focusable absolute left-4 top-4 z-50 rounded-lg bg-ink px-4 py-2 text-sm font-medium text-white"
+          className="sr-only-focusable absolute left-4 top-4 z-50 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white"
         >
           Skip to content
         </a>

@@ -83,9 +83,9 @@ export function AuditReportView({ report }: { readonly report: AuditReport }) {
 
             <dl className="mt-5 grid grid-cols-3 gap-3 sm:max-w-md">
               {[
-                { label: "Passed", value: counts.passed, tone: "text-positive" },
-                { label: "Warnings", value: counts.warnings, tone: "text-[oklch(0.5_0.12_75)]" },
-                { label: "Issues", value: counts.issues, tone: "text-critical" },
+                { label: "Passed", value: counts.passed, tone: "text-positive-ink" },
+                { label: "Warnings", value: counts.warnings, tone: "text-caution-ink" },
+                { label: "Issues", value: counts.issues, tone: "text-critical-ink" },
               ].map((item) => (
                 <div key={item.label} className="rounded-lg border border-line bg-surface-muted px-3 py-2.5">
                   <dt className="text-xs text-ink-muted">{item.label}</dt>
@@ -147,7 +147,7 @@ export function AuditReportView({ report }: { readonly report: AuditReport }) {
                   className={cn(
                     "h-9 shrink-0 rounded-full border px-3.5 text-sm transition-colors",
                     filter === item.id
-                      ? "border-ink bg-ink text-white"
+                      ? "border-accent bg-accent text-white"
                       : "border-line bg-surface text-ink-muted hover:border-line-strong hover:text-ink",
                   )}
                 >
