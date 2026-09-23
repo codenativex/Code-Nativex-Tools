@@ -310,19 +310,79 @@ function ReportView({ report, auditId, status }: { report: AuditReport; auditId:
 
 function FindingCard({ finding }: { finding: AuditFinding }) {
   const severity = String(finding.severity ?? "info").toLowerCase();
-  const tone = severity === "critical" || severity === "high" ? "border-critical/25 bg-critical/5" : severity === "medium" || severity === "moderate" ? "border-caution/30 bg-caution/5" : "border-line bg-surface-muted";
+
+  const tone =
+    severity === "critical" || severity === "high"
+      ? "border-critical/25 bg-critical/5"
+      : severity === "medium" || severity === "moderate"
+        ? "border-caution/30 bg-caution/5"
+        : "border-line bg-surface-muted";
+
   return (
     <article className={`rounded-lg border p-4 ${tone}`}>
       <div className="flex flex-wrap items-center gap-2">
-        <span className="rounded-full border border-line bg-surface px-2 py-0.5 text-[0.6875rem] font-semibold uppercase tracking-wide text-ink-muted">{severity}</span>
-        {finding.category ? <span className="text-xs text-ink-subtle">{finding.category}</span> : null}
-        {finding.status ? <span className="text-xs text-ink-subtle">· {finding.status}</span> : null}
+        <span className="rounded-full border border-line bg-surface px-2 py-0.5 text-[0.6875rem] font-semibold uppercase tracking-wide text-ink-muted">
+          {severity}
+        </span>
+
+        {finding.category ? (
+          <span className="text-xs text-ink-subtle">
+            {renderValue(finding.category)}
+          </span>
+        ) : null}
+
+        {finding.status ? (
+          <span className="text-xs text-ink-subtle">
+            · {renderValue(finding.status)}
+          </span>
+        ) : null}
       </div>
-      <h3 className="mt-2 text-sm font-semibold text-ink">{finding.title ?? finding.code ?? "Finding"}</h3>
-      {finding.evidence ? <p className="mt-2 text-sm leading-relaxed text-ink-muted"><strong className="font-medium text-ink">Evidence:</strong> {finding.evidence}</p> : null}
-      {finding.recommendation ? <p className="mt-2 text-sm leading-relaxed text-ink-muted"><strong className="font-medium text-ink">Recommendation:</strong> {finding.recommendation}</p> : null}
+
+      <h3 className="mt-2 text-sm font-semibold text-ink">
+        {renderValue(finding.title ?? finding.code ?? "Finding")}
+      </h3>
+
+      {finding.evidence ? (
+        <div className="mt-2 text-sm leading-relaxed text-ink-muted">
+          <strong className="font-medium text-ink">Evidence:</strong>
+          <div className="mt-1 whitespace-pre-wrap break-words">
+            {renderValue(finding.evidence)}
+          </div>
+        </div>
+      ) : null}
+
+      {finding.recommendation ? (
+        <div className="mt-2 text-sm leading-relaxed text-ink-muted">
+          <strong className="font-medium text-ink">Recommendation:</strong>
+          <div className="mt-1 whitespace-pre-wrap break-words">
+            {renderValue(finding.recommendation)}
+          </div>
+        </div>
+      ) : null}
     </article>
   );
+}
+
+function renderValue(value: unknown): string {
+  if (value === null || value === undefined) return "";
+
+  if (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  ) {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => renderValue(item)).join("\n");
+  }
+
+  if (typeof value === "object") {
+    return JSON.stringify(value, null, 2);
+  }
+
+  return String(value);
 }
 
 function Metric({ label, value }: { label: string; value: string }) {
