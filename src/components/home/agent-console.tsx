@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useRef, type FocusEvent, type KeyboardEvent } from "react";
+import { useEffect, useId, useRef, useState, type FocusEvent, type KeyboardEvent } from "react";
 
 import { PipelineSteps } from "@/components/home/pipeline-steps";
 import { useConsoleAutoplay } from "@/components/home/use-console-autoplay";
@@ -32,6 +32,33 @@ interface AgentConsoleProps {
 
 const ARROW_KEYS: Readonly<Record<string, number>> = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
 
+interface IndicatorBox {
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+}
+
+/** Compact progress readout beside the pipeline heading. Decorative: the list itself carries the content. */
+function StageStatus({ current, total }: { readonly current: number; readonly total: number }) {
+  const isComplete = current >= total;
+  return (
+    <span aria-hidden="true" className="inline-flex items-center gap-1.5 text-[0.6875rem] tabular-nums text-ink-subtle">
+      {isComplete ? (
+        <svg viewBox="0 0 20 20" className="h-3 w-3 text-positive" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m4.5 10.5 3.5 3.5 7.5-8" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 16 16" className="h-3 w-3 animate-spin text-ink" fill="none">
+          <circle cx="8" cy="8" r="6" stroke="currentColor" strokeOpacity="0.15" strokeWidth="2" />
+          <path d="M8 2a6 6 0 0 1 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      )}
+      {isComplete ? `${total} of ${total} stages` : `Stage ${current + 1} of ${total}`}
+    </span>
+  );
+}
+
 /**
  * The hero's product illustration: a console listing the platform's agents.
  * It plays an animated preview of each live agent's configured pipeline and
@@ -41,11 +68,27 @@ export function AgentConsole({ agents, moreCount }: AgentConsoleProps) {
   const baseId = useId();
   const rootRef = useRef<HTMLElement>(null);
   const progressRef = useRef<HTMLSpanElement>(null);
+  const pipelineRef = useRef<HTMLOListElement>(null);
   const stripRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [indicator, setIndicator] = useState<IndicatorBox | null>(null);
 
   const { selectedIndex, activeStep, isAnimated, isPaused, lastSource, select, togglePaused, setIsHeld } =
-    useConsoleAutoplay({ agents, rootRef, progressRef });
+    useConsoleAutoplay({ agents, rootRef, progressRef, pipelineRef });
+
+  // A single highlight that glides to the selected tab. Re-measured on resize,
+  // since tab sizes change between the phone strip and the desktop rail.
+  useEffect(() => {
+    const strip = stripRef.current;
+    const tab = tabRefs.current[selectedIndex];
+    if (!strip || !tab) return;
+    const measure = () =>
+      setIndicator({ x: tab.offsetLeft, y: tab.offsetTop, width: tab.offsetWidth, height: tab.offsetHeight });
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(strip);
+    return () => observer.disconnect();
+  }, [selectedIndex]);
 
   // On phones the agent list is a horizontal strip: keep an auto-selected tab in view
   // by scrolling the strip only, never the page.
@@ -123,6 +166,17 @@ export function AgentConsole({ agents, moreCount }: AgentConsoleProps) {
             aria-label="Agents"
             className="relative flex gap-1 overflow-x-auto p-2 sm:flex-col sm:overflow-visible"
           >
+            {indicator ? (
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute left-0 top-0 rounded-control bg-surface-raised transition-[transform,width,height] duration-300 ease-out-soft"
+                style={{
+                  transform: `translate(${indicator.x}px, ${indicator.y}px)`,
+                  width: indicator.width,
+                  height: indicator.height,
+                }}
+              />
+            ) : null}
             {agents.map((agent, index) => {
               const isSelected = index === selectedIndex;
               return (
@@ -140,8 +194,10 @@ export function AgentConsole({ agents, moreCount }: AgentConsoleProps) {
                   onClick={() => select(index)}
                   onKeyDown={onKeyDown}
                   className={cn(
-                    "relative flex min-h-10 shrink-0 items-center gap-2.5 overflow-hidden rounded-control px-2.5 py-2 text-left text-[0.8125rem] transition-colors",
-                    isSelected ? "bg-surface-raised text-ink" : "text-ink-muted hover:bg-surface-muted hover:text-ink",
+                    "relative flex min-h-10 shrink-0 items-center gap-2.5 overflow-hidden rounded-control px-2.5 py-2 text-left text-[0.8125rem] transition-colors duration-300",
+                    isSelected
+                      ? cn("text-ink", !indicator && "bg-surface-raised")
+                      : "text-ink-muted hover:bg-surface-muted hover:text-ink",
                   )}
                 >
                   <span className={cn("shrink-0", agent.isRunnable ? "text-ink" : "text-ink-subtle")}>
@@ -184,7 +240,7 @@ export function AgentConsole({ agents, moreCount }: AgentConsoleProps) {
           id={`${baseId}-panel`}
           role="tabpanel"
           aria-labelledby={`${baseId}-tab-${selectedIndex}`}
-          className="flex min-h-[23rem] animate-fade-in flex-col p-4 sm:p-5"
+          className="flex min-h-[23rem] animate-panel-in flex-col p-4 sm:p-5"
         >
           <div className="flex items-start justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
@@ -208,10 +264,16 @@ export function AgentConsole({ agents, moreCount }: AgentConsoleProps) {
 
           <p className="mt-3 text-[0.8125rem] leading-relaxed text-ink-muted">{selected.summary}</p>
 
-          <p className="mt-5 text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-ink-subtle">
-            {selected.isRunnable ? "Pipeline" : "Planned pipeline"}
-          </p>
+          <div className="mt-5 flex items-center justify-between gap-3">
+            <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-ink-subtle">
+              {selected.isRunnable ? "Pipeline" : "Planned pipeline"}
+            </p>
+            {selected.isRunnable && isAnimated ? (
+              <StageStatus current={activeStep} total={selected.steps.length} />
+            ) : null}
+          </div>
           <PipelineSteps
+            listRef={pipelineRef}
             steps={selected.steps}
             isRunnable={selected.isRunnable}
             isAnimated={isAnimated}
