@@ -13,7 +13,7 @@ export default async function WebsiteAuditProgressPage({ params }: { params: Pro
   const { auditId } = await params;
   return (
     <>
-      <section className="border-b border-line bg-surface">
+      <section className="border-b border-line bg-page-header">
         <Container width="wide" className="py-7 sm:py-9">
           <Breadcrumbs items={[{ name: "Home", path: "/" }, { name: "Tools", path: "/tools" }, { name: "Website Audit Agent", path: "/tools/website-audit" }, { name: "Audit", path: `/tools/website-audit/${auditId}` }]} />
         </Container>

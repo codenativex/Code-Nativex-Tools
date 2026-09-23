@@ -1,52 +1,49 @@
 @import "tailwindcss";
 
 /*
- * Design tokens.
+ * Design tokens — Graphite.
  *
- * Brand palette:
- *   #1b4965  deep marine  — primary actions, links, emphasis
- *   #f0edee  warm paper   — page canvas
- *   #e7d7c1  sand         — secondary accent and highlight surfaces
- *
- * Everything visual resolves to a token here, so theming stays centralised and
- * components never hard-code a raw colour. Text tokens are chosen to clear
- * WCAG AA (4.5:1) against both the canvas and surface backgrounds.
+ * A monochrome light system on the Tailwind gray scale, anchored on gray-900
+ * (#111827) as the primary. Hierarchy comes from weight and value rather than
+ * hue, so colour is reserved for status. Every text token clears WCAG AA
+ * (4.5:1) on canvas, band and raised surfaces:
+ *   ink 17.7:1 · ink-muted 7.6:1 · ink-subtle 5.3:1 (4.8:1 on surface-raised)
  */
 @theme {
   /* Surfaces */
-  --color-canvas: #f0edee;
+  --color-canvas: #ffffff;
+  --color-band: #f9fafb;
   --color-surface: #ffffff;
-  --color-surface-muted: #f7f4f3;
-  --color-line: #ddd7d6;
-  --color-line-strong: #c4bdbb;
+  --color-surface-muted: #f9fafb;
+  --color-surface-raised: #f3f4f6;
+  --color-line: #e5e7eb;
+  --color-line-strong: #d1d5db;
 
-  /* Text — ink 9.8:1, muted 6.8:1, subtle 5.0:1 on canvas */
-  --color-ink: #12303f;
-  --color-ink-muted: #3c5464;
-  --color-ink-subtle: #556875;
+  /* Text */
+  --color-ink: #111827;
+  --color-ink-muted: #4b5563;
+  --color-ink-subtle: #656c79;
 
   /* Primary */
-  --color-accent: #1b4965;
-  --color-accent-hover: #133547;
-  --color-accent-soft: #e6edf1;
+  --color-accent: #111827;
+  --color-accent-hover: #2b3441;
+  --color-accent-soft: #f3f4f6;
+  --color-on-accent: #ffffff;
 
-  /* Secondary accent */
-  --color-sand: #e7d7c1;
-  --color-sand-soft: #f4ece1;
-  --color-sand-line: #d8c4a8;
-
-  /* Status. The `-ink` variants are the text-safe pair for each. */
-  --color-positive: #2f6b4f;
-  --color-positive-ink: #2a5f47;
-  --color-caution: #b5792a;
-  --color-caution-ink: #8a5716;
-  --color-critical: #a8372f;
-  --color-critical-ink: #97302a;
+  /* Status. Fills carry white text; the `-ink` variants are for text on tints. */
+  --color-positive: #15803d;
+  --color-positive-ink: #166534;
+  --color-caution: #b45309;
+  --color-caution-ink: #92400e;
+  --color-critical: #dc2626;
+  --color-critical-ink: #b91c1c;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
 
-  --radius-card: 0.75rem;
+  --radius-card: 1rem;
+  --radius-control: 0.625rem;
 }
 
 @layer base {
@@ -71,6 +68,11 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
   /* A single, consistent focus treatment across every interactive element. */
   :focus-visible {
     outline: 2px solid var(--color-accent);
@@ -78,9 +80,14 @@
     border-radius: 4px;
   }
 
-  h1, h2, h3, h4 {
-    letter-spacing: -0.02em;
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
     text-wrap: balance;
+  }
+
+  h4 {
+    letter-spacing: -0.01em;
   }
 
   p {
@@ -100,6 +107,20 @@
     clip: rect(0 0 0 0);
     white-space: nowrap;
     border-width: 0;
+  }
+
+  /* Faint engineering grid, faded out toward the edges. Pure CSS, no image. */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--color-ink) 5%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--color-ink) 5%, transparent) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 100%);
+  }
+
+  /* Header band for inner pages. */
+  .bg-page-header {
+    background-color: var(--color-band);
   }
 }
 

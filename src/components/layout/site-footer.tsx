@@ -36,7 +36,7 @@ export function SiteFooter() {
   const toolLinks = getRunnableTools().map((tool) => ({ href: `/tools/${tool.slug}`, label: tool.name }));
 
   return (
-    <footer className="mt-24 border-t border-line bg-surface">
+    <footer className="mt-24 border-t border-line bg-band">
       <Container width="wide">
         <div className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-5 lg:py-16">
           <div className="sm:col-span-2">

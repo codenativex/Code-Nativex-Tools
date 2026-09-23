@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils/cn";
 
 const controlClasses =
-  "w-full rounded-lg border bg-surface px-3.5 py-2.5 text-[0.9375rem] text-ink transition-colors " +
+  "w-full rounded-control border bg-canvas px-3.5 py-2.5 text-[0.9375rem] text-ink transition-colors " +
   "placeholder:text-ink-subtle focus:border-accent focus:outline-none disabled:opacity-60";
 
 /** Props the field injects into whichever control it wraps. */

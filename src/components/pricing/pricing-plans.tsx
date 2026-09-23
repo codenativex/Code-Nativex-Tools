@@ -30,7 +30,7 @@ export function PricingPlans() {
               onClick={() => setPeriod(item.id)}
               className={cn(
                 "h-9 rounded-full px-4 text-sm transition-colors",
-                period === item.id ? "bg-accent text-white" : "text-ink-muted hover:text-ink",
+                period === item.id ? "bg-accent font-medium text-on-accent" : "text-ink-muted hover:text-ink",
               )}
             >
               {item.label}

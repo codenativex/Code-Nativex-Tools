@@ -16,6 +16,7 @@ export const plannedTools: readonly ToolDefinition[] = [
   definePlannedTool({
     id: "seo-agent",
     slug: "seo-agent",
+    icon: "seo",
     name: "SEO Agent",
     category: "ai-agents",
     summary: "Watches your search presence and tells you what to publish next.",
@@ -44,6 +45,7 @@ export const plannedTools: readonly ToolDefinition[] = [
   definePlannedTool({
     id: "content-writer-agent",
     slug: "content-writer-agent",
+    icon: "write",
     name: "Content Writer Agent",
     category: "content",
     summary: "Writes from your own material, not the open web.",
@@ -70,6 +72,7 @@ export const plannedTools: readonly ToolDefinition[] = [
   definePlannedTool({
     id: "accessibility-agent",
     slug: "accessibility-agent",
+    icon: "accessibility",
     name: "Accessibility Agent",
     category: "ai-agents",
     summary: "WCAG-oriented review of a page with remediation guidance per violation.",
@@ -93,6 +96,7 @@ export const plannedTools: readonly ToolDefinition[] = [
   definePlannedTool({
     id: "performance-agent",
     slug: "performance-agent",
+    icon: "gauge",
     name: "Website Performance Agent",
     category: "ai-agents",
     summary: "Field and lab performance signals explained in terms of what to change.",
@@ -116,6 +120,7 @@ export const plannedTools: readonly ToolDefinition[] = [
   definePlannedTool({
     id: "schema-generator",
     slug: "schema-generator",
+    icon: "schema",
     name: "Schema Generator",
     category: "seo",
     summary: "Build valid JSON-LD structured data for articles, products, organisations and FAQs.",
@@ -139,6 +144,7 @@ export const plannedTools: readonly ToolDefinition[] = [
   definePlannedTool({
     id: "sitemap-generator",
     slug: "sitemap-generator",
+    icon: "sitemap",
     name: "Sitemap Generator",
     category: "seo",
     summary: "Crawl a site and produce a clean XML sitemap with priorities and change frequencies.",
@@ -162,6 +168,7 @@ export const plannedTools: readonly ToolDefinition[] = [
   definePlannedTool({
     id: "competitor-analysis-agent",
     slug: "competitor-analysis-agent",
+    icon: "compare",
     name: "Competitor Analysis Agent",
     category: "marketing",
     summary: "Compare your page against competing pages on structure, coverage and metadata.",
@@ -185,6 +192,7 @@ export const plannedTools: readonly ToolDefinition[] = [
   definePlannedTool({
     id: "content-analysis-agent",
     slug: "content-analysis-agent",
+    icon: "document",
     name: "Content Analysis Agent",
     category: "content",
     summary: "Readability, structure and coverage analysis for long-form content.",
@@ -208,6 +216,7 @@ export const plannedTools: readonly ToolDefinition[] = [
   definePlannedTool({
     id: "scheduled-audits",
     slug: "scheduled-audits",
+    icon: "schedule",
     name: "Scheduled Audits",
     category: "automation",
     summary: "Run any Code Nativex audit on a schedule and get alerted when scores move.",

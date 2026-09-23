@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Code Nativex">
-  <rect width="32" height="32" rx="7" fill="#1b4965" />
+  <rect width="32" height="32" rx="8" fill="#111827" />
   <text x="16" y="17" text-anchor="middle" dominant-baseline="central" fill="#ffffff"
         font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" letter-spacing="-0.5">CN</text>
 </svg>

@@ -2,16 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { FaqList } from "@/components/faq/faq-list";
-import { HeroPreview } from "@/components/home/hero-preview";
+import { AgentConsole, type ConsoleAgent } from "@/components/home/agent-console";
 import { ToolGrid } from "@/components/tools/tool-grid";
+import { toolIconName } from "@/components/tools/tool-icon";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { faqGroups } from "@/lib/faq/entries";
 import { STANDARD_OPTIONS } from "@/lib/audit-agent/presets";
 import { plans } from "@/lib/pricing/plans";
-import { siteConfig } from "@/lib/site";
+import { getCategory } from "@/lib/tools/categories";
 import { getRunnableTools, tools } from "@/lib/tools/registry";
+import type { ToolDefinition } from "@/lib/tools/types";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -28,20 +30,35 @@ const auditCoverage = [
   { name: "Reports", detail: "PDF, HTML and JSON artifacts when the worker publishes them" },
 ] as const;
 
-/** Lighthouse reports these four categories; kept in step with the hero panel. */
+/** Lighthouse reports performance, accessibility, SEO and best practices. */
 const lighthouseCategoryCount = 4;
 
-/** The three things the platform does, summarised for the hero. */
-const capabilities = [
-  { label: "Audit", detail: "Crawl a site in a real browser and see what is broken." },
-  { label: "Prospect", detail: "Find, verify and score qualified leads from public sources." },
-  { label: "Automate", detail: "Scheduled runs and change alerts — in development." },
-] as const;
+const assurances = ["Free to start, no account", "Real runs, never simulated", "Evidence with every result"] as const;
+
+/** How many in-development agents the hero console lists beside the live ones. */
+const CONSOLE_PLANNED_LIMIT = 4;
+const CONSOLE_PLANNED_STEPS = 4;
+
+/** Shapes a registry entry for the client-side console, keeping only serializable fields. */
+function toConsoleAgent(tool: ToolDefinition): ConsoleAgent {
+  return {
+    slug: tool.slug,
+    name: tool.name,
+    categoryName: getCategory(tool.category).name,
+    status: tool.status,
+    icon: toolIconName(tool),
+    summary: tool.summary,
+    steps: tool.runtime
+      ? tool.runtime.stages.map((stage) => stage.label)
+      : tool.learning.howItWorks.slice(0, CONSOLE_PLANNED_STEPS),
+    isRunnable: tool.runtime !== undefined,
+  };
+}
 
 const howItWorks = [
-  { step: "Pick a tool", body: "Every tool page says what it needs and what it returns before you type anything." },
-  { step: "Give it one input", body: "A URL, or a short form. No account, no card, no onboarding flow to get through." },
-  { step: "It runs on our servers", body: "Real work, not a simulation. The stages you see match what the backend is doing." },
+  { step: "Pick an agent", body: "Every agent page says what it needs and what it returns before you type anything." },
+  { step: "Give it a brief", body: "A URL, or a short form. No account, no card, no onboarding flow to get through." },
+  { step: "It runs on our infrastructure", body: "Real work, not a simulation. The stages you see are the stages the agent reports." },
   { step: "Act on the report", body: "Issues first, each with the evidence the tool observed and a specific recommendation." },
 ] as const;
 
@@ -70,76 +87,88 @@ const principles = [
 export default function HomePage() {
   const liveTools = getRunnableTools();
   const upcomingTools = tools.filter((tool) => tool.runtime === undefined);
+  const consoleAgents = [...liveTools, ...upcomingTools.slice(0, CONSOLE_PLANNED_LIMIT)].map(toConsoleAgent);
   const platformFaq = faqGroups.find((group) => group.id === "platform");
 
   return (
     <>
       {/* Hero */}
-      <section className="overflow-hidden border-b border-line bg-surface">
-        <Container width="wide" className="py-14 sm:py-20 lg:py-24">
-          <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-16">
-            <div className="max-w-2xl">
-              <p className="inline-flex items-center gap-2 rounded-full border border-sand-line bg-sand-soft px-3 py-1 text-xs font-medium text-ink">
-                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-positive" />
-                Tools and automation platform · {liveTools.length} live, {upcomingTools.length} in development
-              </p>
+      <section className="relative overflow-hidden border-b border-line">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-grid" />
 
-              <h1 className="mt-5 text-[2.125rem] font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.25rem]">
-                {siteConfig.tagline}
+        <Container width="wide" className="relative py-16 sm:py-20 lg:py-24">
+          <div className="grid grid-cols-1 items-center gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,35rem)] xl:gap-14">
+            <div className="max-w-3xl xl:max-w-2xl">
+              <Link
+                href="/tools"
+                className="group inline-flex max-w-full items-center gap-2 rounded-full border border-line-strong bg-surface/70 py-1 pl-1 pr-3 text-xs text-ink-muted transition-colors hover:border-ink-subtle hover:text-ink"
+              >
+                <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-positive/15 px-2 py-0.5 font-medium text-positive-ink">
+                  <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-positive" />
+                  {liveTools.length} live
+                </span>
+                <span className="truncate">{upcomingTools.length} more agents in development</span>
+                <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">
+                  →
+                </span>
+              </Link>
+
+              <h1 className="mt-6 text-[2.375rem] font-bold leading-[1.04] sm:text-[3.25rem] xl:text-[3.75rem]">
+                Put specialised agents to work <span className="text-ink-subtle">on your website</span>
               </h1>
 
-              <p className="mt-5 text-base leading-relaxed text-ink-muted sm:text-lg">
-                Code Nativex Tools is where the repetitive parts of building and growing a website get automated.
-                Crawl a site in a real browser and run Lighthouse, accessibility, responsive and link checks across
-                every page it finds — or put an agent to work sourcing and scoring qualified leads.
+              <p className="mt-6 text-base leading-relaxed text-ink-muted sm:text-lg">
+                Code Nativex runs purpose-built agents for website auditing, lead generation, SEO and content. Each
+                one does real work on our infrastructure — crawling in a real browser, verifying sources — and hands
+                back evidence your team can act on.
               </p>
-
-              <ul className="mt-7 grid gap-4 sm:grid-cols-3">
-                {capabilities.map((capability) => (
-                  <li key={capability.label} className="border-t border-line pt-3">
-                    <p className="text-sm font-semibold text-ink">{capability.label}</p>
-                    <p className="mt-1 text-sm leading-snug text-ink-muted">{capability.detail}</p>
-                  </li>
-                ))}
-              </ul>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <ButtonLink href="/tools/website-audit" size="lg">
                   Run a website audit
                 </ButtonLink>
                 <ButtonLink href="/tools" variant="secondary" size="lg">
-                  Browse all {tools.length} tools
+                  Explore all agents
                 </ButtonLink>
               </div>
 
-              <p className="mt-4 text-sm text-ink-subtle">
-                Free to start · No account required · Results in seconds
-              </p>
+              <ul className="mt-8 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-x-6">
+                {assurances.map((assurance) => (
+                  <li key={assurance} className="flex items-center gap-2 text-sm text-ink-muted">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 20 20"
+                      className="h-4 w-4 shrink-0 text-accent"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="m4 10.5 4 4 8-9" />
+                    </svg>
+                    {assurance}
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            <div className="relative lg:pl-4">
-              {/* Warm band behind the panel, bleeding off the right edge. */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -inset-y-10 left-[-2.5rem] right-[-50vw] hidden bg-sand-soft lg:block"
-              />
-              <div className="relative">
-                <HeroPreview />
-              </div>
+            <div className="min-w-0 max-w-3xl xl:max-w-none">
+              <AgentConsole agents={consoleAgents} moreCount={tools.length - consoleAgents.length} />
             </div>
           </div>
 
-          <dl className="mt-14 grid grid-cols-2 gap-6 border-t border-line pt-8 sm:grid-cols-4 lg:mt-16">
+          <dl className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-card border border-line bg-line sm:grid-cols-4 lg:mt-20">
             {[
-              { label: "Tools you can run now", value: String(liveTools.length) },
+              { label: "Agents live now", value: String(liveTools.length) },
               { label: "In the catalogue", value: String(tools.length) },
               { label: "Pages per standard audit", value: String(STANDARD_OPTIONS.max_pages) },
               { label: "Lighthouse categories", value: String(lighthouseCategoryCount) },
             ].map((stat) => (
               // Reversed so the figures share a baseline when a label wraps.
-              <div key={stat.label} className="flex flex-col-reverse gap-1">
+              <div key={stat.label} className="flex flex-col-reverse gap-1 bg-canvas/90 px-5 py-5">
                 <dt className="text-xs leading-snug text-ink-subtle">{stat.label}</dt>
-                <dd className="font-mono text-2xl font-semibold tabular-nums text-ink sm:text-3xl">{stat.value}</dd>
+                <dd className="font-display text-3xl font-semibold tabular-nums text-ink">{stat.value}</dd>
               </div>
             ))}
           </dl>
@@ -150,8 +179,8 @@ export default function HomePage() {
       <Container width="wide" className="py-16 sm:py-20">
         <SectionHeading
           eyebrow="Available now"
-          title="Tools you can run today"
-          description="These run on our servers and return what they actually observed. Try now opens the tool; Read more explains exactly how it works."
+          title="Agents you can run today"
+          description="Each runs real work and returns what it actually observed. Try now opens the agent; Read more explains exactly how it works."
         />
         <div className="mt-8">
           <ToolGrid tools={liveTools} columns={2} />
@@ -159,12 +188,12 @@ export default function HomePage() {
       </Container>
 
       {/* How it works */}
-      <section className="border-y border-line bg-sand-soft">
+      <section className="border-y border-line bg-band">
         <Container width="wide" className="py-16 sm:py-20">
           <SectionHeading
             eyebrow="How it works"
             title="One input, a real run, a report you can act on"
-            description="The same four steps apply to every tool on the platform."
+            description="The same four steps apply to every agent on the platform."
           />
           <ol className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
             {howItWorks.map((item, index) => (
@@ -192,21 +221,25 @@ export default function HomePage() {
             </ButtonLink>
           }
         />
-        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Seven capabilities plus the call to action fill two even rows of four. */}
+        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {auditCoverage.map((category) => (
             <li key={category.name} className="rounded-card border border-line bg-surface p-5">
               <h3 className="text-sm font-semibold text-ink">{category.name}</h3>
               <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">{category.detail}</p>
             </li>
           ))}
+          <li className="flex flex-col justify-between gap-4 rounded-card border border-accent/30 bg-accent-soft p-5">
+            <p className="text-sm font-semibold text-ink">See it on your own site</p>
+            <ButtonLink href="/tools/website-audit" size="sm">
+              Run an audit now
+            </ButtonLink>
+          </li>
         </ul>
-        <ButtonLink href="/tools/website-audit" className="mt-6">
-          Run an audit now
-        </ButtonLink>
       </Container>
 
       {/* Full catalogue */}
-      <section className="border-y border-line bg-surface">
+      <section className="border-y border-line bg-band">
         <Container width="wide" className="py-16 sm:py-20">
           <SectionHeading
             eyebrow="The catalogue"
@@ -253,7 +286,7 @@ export default function HomePage() {
       </Container>
 
       {/* Principles */}
-      <section className="border-y border-line bg-sand-soft">
+      <section className="border-y border-line bg-band">
         <Container width="wide" className="py-16 sm:py-20">
           <SectionHeading
             eyebrow="How we build"

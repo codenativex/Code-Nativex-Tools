@@ -53,7 +53,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
 
   return (
     <>
-      <section className="border-b border-line bg-surface">
+      <section className="border-b border-line bg-page-header">
         <Container width="wide" className="py-8 sm:py-12">
           <Breadcrumbs
             items={[
@@ -86,7 +86,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
       </section>
 
       <Container width="wide" className="py-10 sm:py-14">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-12">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-12">
           <div className="min-w-0">
             {tool.slug === "website-audit" ? (
               <WebsiteAuditRunner />

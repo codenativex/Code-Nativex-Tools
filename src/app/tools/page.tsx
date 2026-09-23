@@ -32,7 +32,7 @@ export default function ToolsPage() {
 
   return (
     <>
-      <section className="border-b border-line bg-surface">
+      <section className="border-b border-line bg-page-header">
         <Container width="wide" className="py-14 sm:py-20">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">Directory</p>

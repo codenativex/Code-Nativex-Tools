@@ -35,7 +35,7 @@ export default function ContactPage() {
 
   return (
     <>
-      <section className="border-b border-line bg-surface">
+      <section className="border-b border-line bg-page-header">
         <Container width="wide" className="py-14 sm:py-20">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">Contact</p>
@@ -49,7 +49,7 @@ export default function ContactPage() {
       </section>
 
       <Container width="wide" className="py-12 sm:py-16">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-12">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-12">
           <div className="min-w-0">
             {canSubmit ? (
               <Suspense fallback={<FormFallback />}>

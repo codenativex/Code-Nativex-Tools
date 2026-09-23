@@ -20,7 +20,7 @@ export const metadata: Metadata = buildPageMetadata({
 export default function FaqPage() {
   return (
     <>
-      <section className="border-b border-line bg-surface">
+      <section className="border-b border-line bg-page-header">
         <Container width="narrow" className="py-14 sm:py-20">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">FAQ</p>
           <h1 className="mt-4 text-[1.875rem] font-semibold leading-tight sm:text-4xl">

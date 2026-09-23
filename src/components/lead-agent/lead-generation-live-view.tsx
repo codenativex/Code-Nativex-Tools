@@ -60,7 +60,7 @@ export function LeadGenerationLiveView({ requestId }: { requestId: string }) {
         </div>
 
         <div className="mt-6 h-2.5 overflow-hidden rounded-full bg-surface-muted">
-          <div className="h-full rounded-full bg-ink transition-all" style={{ width: `${percent}%` }} />
+          <div className="h-full rounded-full bg-accent transition-all" style={{ width: `${percent}%` }} />
         </div>
         <div className="mt-2 flex justify-between text-xs text-ink-subtle"><span>{progress?.currentStage ?? "Waiting"}</span><span>{percent}%</span></div>
 
@@ -93,8 +93,8 @@ export function LeadGenerationLiveView({ requestId }: { requestId: string }) {
         </section>
       ) : null}
 
-      {error ? <div className="rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
-      {progress?.errorMessage ? <div className="rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">{progress.errorMessage}</div> : null}
+      {error ? <div role="alert" className="rounded-control border border-critical/30 bg-critical/10 px-4 py-3 text-sm text-critical-ink">{error}</div> : null}
+      {progress?.errorMessage ? <div role="alert" className="rounded-control border border-critical/30 bg-critical/10 px-4 py-3 text-sm text-critical-ink">{progress.errorMessage}</div> : null}
 
       {terminal.has(progress?.status ?? "") ? (
         <section className="rounded-card border border-line bg-surface p-5 sm:p-6">

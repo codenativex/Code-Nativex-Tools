@@ -38,7 +38,7 @@ export default function LearningPage() {
 
   return (
     <>
-      <section className="border-b border-line bg-surface">
+      <section className="border-b border-line bg-page-header">
         <Container width="wide" className="py-16 sm:py-24">
           <div className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">Learning Center</p>

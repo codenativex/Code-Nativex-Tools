@@ -30,7 +30,7 @@ export default function PricingPage() {
 
   return (
     <>
-      <section className="border-b border-line bg-surface">
+      <section className="border-b border-line bg-page-header">
         <Container width="wide" className="py-14 sm:py-20">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">Pricing</p>

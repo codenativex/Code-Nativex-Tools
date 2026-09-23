@@ -88,11 +88,28 @@ export interface ToolLearningContent {
   readonly sections?: readonly ToolLearningSection[];
 }
 
+/** Named glyphs available to tools. Rendering lives in `components/tools/tool-icon`. */
+export type ToolIconName =
+  | "scan"
+  | "leads"
+  | "seo"
+  | "write"
+  | "accessibility"
+  | "gauge"
+  | "schema"
+  | "sitemap"
+  | "compare"
+  | "document"
+  | "schedule"
+  | "agent";
+
 export interface ToolDefinition {
   readonly id: string;
   readonly slug: string;
   readonly name: string;
   readonly category: ToolCategoryId;
+  /** Falls back to the category's icon when omitted. */
+  readonly icon?: ToolIconName;
   readonly status: ToolStatus;
   /** One-line summary used on cards and in search. */
   readonly summary: string;

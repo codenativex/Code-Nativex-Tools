@@ -165,8 +165,8 @@ export function LeadGenerationRunner() {
         </div>
       </section>
 
-      {error ? <div className="rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
-      <button disabled={busy} className="inline-flex min-h-11 items-center justify-center rounded-lg bg-ink px-5 py-2.5 text-sm font-semibold text-surface transition-opacity disabled:opacity-50" type="submit">
+      {error ? <div role="alert" className="rounded-control border border-critical/30 bg-critical/10 px-4 py-3 text-sm text-critical-ink">{error}</div> : null}
+      <button disabled={busy} className="inline-flex min-h-11 items-center justify-center rounded-control bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover disabled:opacity-50" type="submit">
         {busy ? "Starting agent…" : "Start lead generation"}
       </button>
     </form>

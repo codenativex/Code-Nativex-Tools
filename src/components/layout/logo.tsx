@@ -11,11 +11,11 @@ export function Logo() {
     >
       <span
         aria-hidden="true"
-        className="grid h-8 w-8 place-items-center rounded-lg bg-accent text-[0.8125rem] font-bold tracking-tight text-white"
+        className="grid h-8 w-8 place-items-center rounded-control bg-accent font-display text-[0.8125rem] font-bold tracking-tight text-on-accent"
       >
         CN
       </span>
-      <span className="text-[0.9375rem] font-semibold leading-none">
+      <span className="font-display text-[0.9375rem] font-semibold leading-none">
         Code Nativex
         <span className="ml-1.5 font-normal text-ink-subtle">Tools</span>
       </span>

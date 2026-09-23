@@ -5,6 +5,7 @@ export const websiteAuditTool: ToolDefinition = {
   slug: "website-audit",
   name: "Website Audit Agent",
   category: "website-auditing",
+  icon: "scan",
   status: "live",
   summary: "Run a real multi-page website audit with browser testing, Lighthouse, accessibility checks and downloadable reports.",
   description:

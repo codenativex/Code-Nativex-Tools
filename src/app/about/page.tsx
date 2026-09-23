@@ -36,7 +36,7 @@ const commitments = [
 export default function AboutPage() {
   return (
     <>
-      <section className="border-b border-line bg-surface">
+      <section className="border-b border-line bg-page-header">
         <Container width="narrow" className="py-16 sm:py-24">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">About</p>
           <h1 className="mt-4 text-[2rem] font-semibold leading-[1.1] tracking-tight sm:text-5xl">

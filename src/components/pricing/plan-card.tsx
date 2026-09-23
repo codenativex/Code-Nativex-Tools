@@ -19,7 +19,7 @@ export function PlanCard({ plan, period }: PlanCardProps) {
       )}
     >
       {plan.highlighted ? (
-        <p className="absolute -top-3 left-6 rounded-full bg-accent px-2.5 py-0.5 text-xs font-medium text-white">
+        <p className="absolute -top-3 left-6 rounded-full bg-accent px-2.5 py-0.5 text-xs font-semibold text-on-accent">
           Most popular
         </p>
       ) : null}

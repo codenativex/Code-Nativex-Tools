@@ -147,7 +147,7 @@ export function AuditReportView({ report }: { readonly report: AuditReport }) {
                   className={cn(
                     "h-9 shrink-0 rounded-full border px-3.5 text-sm transition-colors",
                     filter === item.id
-                      ? "border-accent bg-accent text-white"
+                      ? "border-accent bg-accent font-medium text-on-accent"
                       : "border-line bg-surface text-ink-muted hover:border-line-strong hover:text-ink",
                   )}
                 >

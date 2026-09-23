@@ -5,6 +5,7 @@ export const leadGenerationTool: ToolDefinition = {
   slug: "lead-generation",
   name: "Lead Generation Agent",
   category: "ai-agents",
+  icon: "leads",
   status: "live",
   summary: "Find, verify and score qualified business leads from multiple public sources.",
   description:

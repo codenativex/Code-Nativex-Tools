@@ -24,7 +24,7 @@ export function Breadcrumbs({ items }: { readonly items: readonly Crumb[] }) {
                 </Link>
               )}
               {isLast ? null : (
-                <span aria-hidden="true" className="text-line-strong">
+                <span aria-hidden="true" className="text-ink-subtle">
                   /
                 </span>
               )}

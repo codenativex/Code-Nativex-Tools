@@ -7,13 +7,13 @@ type ButtonVariant = "primary" | "secondary" | "ghost";
 type ButtonSize = "sm" | "md" | "lg";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors duration-150 " +
+  "inline-flex items-center justify-center gap-2 rounded-control font-medium transition-colors duration-150 " +
   "disabled:cursor-not-allowed disabled:opacity-55 whitespace-nowrap";
 
 const variants: Record<ButtonVariant, string> = {
-  primary: "bg-accent text-white hover:bg-accent-hover",
-  secondary: "border border-line-strong bg-surface text-ink hover:bg-surface-muted",
-  ghost: "text-ink-muted hover:bg-surface-muted hover:text-ink",
+  primary: "bg-accent font-semibold text-on-accent hover:bg-accent-hover",
+  secondary: "border border-line-strong bg-surface/60 text-ink hover:border-ink-subtle hover:bg-surface-raised",
+  ghost: "text-ink-muted hover:bg-surface-raised hover:text-ink",
 };
 
 /** Minimum 44px touch target at `md` and above. */

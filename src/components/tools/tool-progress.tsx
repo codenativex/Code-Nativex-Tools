@@ -41,7 +41,7 @@ export function ToolProgress({ stages }: ToolProgressProps) {
                 aria-hidden="true"
                 className={cn(
                   "grid h-5 w-5 shrink-0 place-items-center rounded-full border text-[0.625rem] font-semibold",
-                  isDone && "border-positive bg-positive text-white",
+                  isDone && "border-positive bg-positive text-on-accent",
                   isActive && "border-accent text-accent",
                   !isDone && !isActive && "border-line text-ink-subtle",
                 )}

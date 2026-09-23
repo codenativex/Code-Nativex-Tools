@@ -187,7 +187,7 @@ function StagePanel({ stage, status }: { stage?: string | null; status: string }
           const active = index === currentIndex;
           return (
             <li key={token} className={`flex items-center gap-3 rounded-lg border p-3 ${active ? "border-accent bg-accent-soft" : "border-line bg-surface-muted"}`}>
-              <span className={`flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${done ? "bg-positive text-white" : active ? "bg-accent text-white" : "bg-line text-ink-muted"}`}>
+              <span className={`flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${done ? "bg-positive text-on-accent" : active ? "bg-accent text-on-accent" : "bg-line text-ink-muted"}`}>
                 {done ? "✓" : index + 1}
               </span>
               <div>

@@ -49,7 +49,7 @@ export default async function LearningDetailPage({ params }: LearningDetailProps
 
   return (
     <>
-      <section className="border-b border-line bg-surface">
+      <section className="border-b border-line bg-page-header">
         <Container width="narrow" className="py-8 sm:py-12">
           <Breadcrumbs
             items={[
