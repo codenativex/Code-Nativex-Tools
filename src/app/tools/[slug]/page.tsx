@@ -6,6 +6,8 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { ToolRunner } from "@/components/tools/tool-runner";
 import { WebsiteAuditRunner } from "@/components/audit-agent/website-audit-runner";
 import { LeadGenerationRunner } from "@/components/lead-agent/lead-generation-runner";
+import { GmailReplyAgentRunner } from "@/components/gmail-agent/gmail-reply-agent-runner";
+import { SocialMediaPostAgentRunner } from "@/components/social-agent/social-media-post-agent-runner";
 import { ToolStatusBadge } from "@/components/tools/tool-status-badge";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { ButtonLink } from "@/components/ui/button";
@@ -92,6 +94,10 @@ export default async function ToolPage({ params }: ToolPageProps) {
               <WebsiteAuditRunner />
             ) : tool.slug === "lead-generation" ? (
               <LeadGenerationRunner />
+            ) : tool.slug === "gmail-reply-agent" ? (
+              <GmailReplyAgentRunner />
+            ) : tool.slug === "social-media-post-agent" ? (
+              <SocialMediaPostAgentRunner />
             ) : tool.runtime ? (
               <ToolRunner tool={tool} submitLabel="Generate" />
             ) : (

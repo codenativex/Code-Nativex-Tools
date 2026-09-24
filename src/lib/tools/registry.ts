@@ -1,5 +1,7 @@
+import { gmailReplyAgentTool } from "./definitions/gmail-reply-agent";
 import { leadGenerationTool } from "./definitions/lead-generation";
 import { plannedTools } from "./definitions/planned";
+import { socialMediaPostAgentTool } from "./definitions/social-media-post-agent";
 import { websiteAuditTool } from "./definitions/website-audit";
 import type { ToolCategoryId, ToolDefinition, ToolStatus } from "./types";
 
@@ -7,6 +9,8 @@ import type { ToolCategoryId, ToolDefinition, ToolStatus } from "./types";
 export const tools: readonly ToolDefinition[] = [
   websiteAuditTool,
   leadGenerationTool,
+  gmailReplyAgentTool,
+  socialMediaPostAgentTool,
   ...plannedTools,
 ];
 
