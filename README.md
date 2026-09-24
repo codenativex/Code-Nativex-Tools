@@ -6,7 +6,8 @@ architecture designed to carry hundreds of tools without the codebase degrading.
 
 ## Stack
 
-- **Next.js 15** (App Router, React 19 Server Components)
+- **Next.js 16** (App Router, React 19 Server Components, Turbopack for both `dev` and `build`)
+- **Node.js 20.9+** — the minimum Next.js 16 supports
 - **TypeScript** in strict mode, with `noUncheckedIndexedAccess` and no unused locals
 - **Tailwind CSS 4** with design tokens declared in `src/app/globals.css`
 - **Zod** for server-side request validation

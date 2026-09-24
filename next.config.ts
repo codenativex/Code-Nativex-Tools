@@ -25,9 +25,6 @@ const slugAliases: Readonly<Record<string, string>> = {
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  // Linting runs as its own step (`npm run lint`) against the flat config in
-  // eslint.config.mjs, which Next's build-time detector does not recognise.
-  eslint: { ignoreDuringBuilds: true },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
