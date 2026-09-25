@@ -1,3 +1,4 @@
+﻿import { voiceSalesAgentTool } from "./definitions/voice-sales-agent";
 import { gmailReplyAgentTool } from "./definitions/gmail-reply-agent";
 import { leadGenerationTool } from "./definitions/lead-generation";
 import { plannedTools } from "./definitions/planned";
@@ -9,6 +10,7 @@ import type { ToolCategoryId, ToolDefinition, ToolStatus } from "./types";
 export const tools: readonly ToolDefinition[] = [
   websiteAuditTool,
   leadGenerationTool,
+  voiceSalesAgentTool,
   gmailReplyAgentTool,
   socialMediaPostAgentTool,
   ...plannedTools,
@@ -66,3 +68,4 @@ export function queryTools({ search, category }: ToolQuery): readonly ToolDefini
     return haystack.includes(term);
   });
 }
+
