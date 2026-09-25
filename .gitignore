@@ -6,3 +6,8 @@ out
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
+
+node_modules/
+.next/
+.env
+.env.local
