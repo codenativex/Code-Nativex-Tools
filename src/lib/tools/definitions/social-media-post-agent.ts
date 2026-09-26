@@ -32,5 +32,33 @@ export const socialMediaPostAgentTool: ToolDefinition = {
       "After five rejections the post is stopped for manual review.",
     ],
     exampleUseCase: "A restaurant receives a branded daily post on WhatsApp, taps YES and the approved post is published to Facebook and Instagram automatically.",
+    capabilities: [
+      {
+        title: "Brand profile from your website",
+        body: "Reads your site once and saves a reusable brand profile that every future post is built from.",
+      },
+      {
+        title: "Daily caption and poster",
+        body: "Writes a caption and creates a branded poster each day, without repeating recent posts.",
+      },
+      {
+        title: "WhatsApp approval",
+        body: "Each finished post is sent to WhatsApp with YES and NO buttons before anything goes live.",
+      },
+      {
+        title: "Automatic publishing",
+        body: "Approved posts publish to Facebook and Instagram, and every post is tracked in its history.",
+      },
+    ],
+    requirements: [
+      "Your business website and brand details.",
+      "The Brand Setup, Daily Publisher and WhatsApp Approval workflows, imported and active in n8n.",
+      "OpenAI, Google Sheets, Cloudinary, WhatsApp Cloud API and Meta publishing credentials, connected inside n8n.",
+    ],
+    limitations: [
+      "Nothing is published without a YES on WhatsApp.",
+      "After five rejections a post stops and waits for manual review.",
+      "Publishing currently covers Facebook and Instagram.",
+    ],
   },
 };

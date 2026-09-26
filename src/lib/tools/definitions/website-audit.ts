@@ -62,5 +62,32 @@ export const websiteAuditTool: ToolDefinition = {
         body: "Completed audits render report.json directly in Code Nativex Tools. PDF, HTML, JSON and evidence ZIP downloads appear only when the worker actually advertises those files.",
       },
     ],
+    capabilities: [
+      {
+        title: "Multi-page crawl",
+        body: "Discovers public pages from your starting URL and audits up to 50 of them in a Standard Audit. Custom runs set their own page budget.",
+      },
+      {
+        title: "Lighthouse on every page",
+        body: "Performance, accessibility, SEO and best-practices scores for each audited page, not just the homepage.",
+      },
+      {
+        title: "Real browser testing",
+        body: "Responsive layouts are checked in a real browser, with optional cross-browser runs that include Firefox.",
+      },
+      {
+        title: "Evidence-backed reports",
+        body: "Every finding carries the page and evidence it came from, with PDF, HTML, JSON and evidence downloads.",
+      },
+    ],
+    requirements: [
+      "A website URL that is reachable from the public internet.",
+      "A scan preset: Quick Test, Standard Audit or Custom.",
+    ],
+    limitations: [
+      "Public pages only. Anything behind a login is not audited.",
+      "Progress shows the worker's real stage without a percentage or ETA, because page discovery can grow during a crawl.",
+      "Download links appear only for files the audit worker actually publishes.",
+    ],
   },
 };

@@ -78,6 +78,12 @@ export interface ToolLearningSection {
   readonly bullets?: readonly string[];
 }
 
+/** A headline feature, shown as a card on the agent's details page. */
+export interface ToolCapability {
+  readonly title: string;
+  readonly body: string;
+}
+
 export interface ToolLearningContent {
   readonly problem: string;
   readonly audience: readonly string[];
@@ -86,6 +92,15 @@ export interface ToolLearningContent {
   readonly howItWorks: readonly string[];
   readonly exampleUseCase: string;
   readonly sections?: readonly ToolLearningSection[];
+  /**
+   * What the agent does today. Runnable agents only: an in-development agent
+   * has a published plan, not capabilities.
+   */
+  readonly capabilities?: readonly ToolCapability[];
+  /** What must be in place before a run: accounts, access, inputs. */
+  readonly requirements?: readonly string[];
+  /** Honest boundaries of the current version, stated before someone relies on it. */
+  readonly limitations?: readonly string[];
 }
 
 /** Named glyphs available to tools. Rendering lives in `components/tools/tool-icon`. */

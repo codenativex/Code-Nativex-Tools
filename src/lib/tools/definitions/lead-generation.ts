@@ -50,5 +50,32 @@ export const leadGenerationTool: ToolDefinition = {
     ],
     exampleUseCase:
       "An agency requests 25 dentists in Dallas that may need a website redesign, then reviews only the verified high-scoring opportunities returned by the agent.",
+    capabilities: [
+      {
+        title: "Five discovery sources",
+        body: "Local businesses in an area, LinkedIn posts with requirements, public client projects, agency partners and businesses actively looking for help.",
+      },
+      {
+        title: "Verified websites and contacts",
+        body: "Candidate businesses have their public website and contact details verified before they reach you.",
+      },
+      {
+        title: "Deduplication and filtering",
+        body: "Duplicate and weak records are removed, so the list holds opportunities rather than noise.",
+      },
+      {
+        title: "Scored opportunities",
+        body: "Each lead is researched and scored, with opportunity signals and a recommended service to pitch.",
+      },
+    ],
+    requirements: [
+      "A discovery source and a target market: country, region or city.",
+      "The business categories to target and the service you want to offer.",
+      "How many leads you need and the minimum quality you will accept.",
+    ],
+    limitations: [
+      "Leads come from public sources, so coverage depends on what businesses publish about themselves.",
+      "Runs execute on the connected Code Nativex lead agent. This page submits the request and shows its live progress.",
+    ],
   },
 };

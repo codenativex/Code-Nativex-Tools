@@ -42,5 +42,28 @@ export const voiceSalesAgentTool: ToolDefinition = {
     ],
     exampleUseCase:
       "A business owner opens Try now, explains that they already have a website but are not getting enough leads, and discusses whether a website audit, automation or lead generation solution is relevant.",
+    capabilities: [
+      {
+        title: "Real-time voice conversation",
+        body: "Speak naturally through your microphone and hear answers in the moment, without typing.",
+      },
+      {
+        title: "Grounded in company knowledge",
+        body: "Answers come from the configured CodeNativeX prompt and knowledge base rather than the open web.",
+      },
+      {
+        title: "English and Urdu",
+        body: "The conversation continues in whichever of the two languages you speak.",
+      },
+      {
+        title: "Honest sales handling",
+        body: "Asks relevant follow-up questions and handles common objections without inventing prices or company facts.",
+      },
+    ],
+    requirements: ["A browser with a working microphone.", "Microphone permission when your browser asks for it."],
+    limitations: [
+      "This is a standalone browser voice demo.",
+      "It is not yet connected to the Lead Generation Agent, outbound phone calling, CRM actions or meeting booking.",
+    ],
   },
 };

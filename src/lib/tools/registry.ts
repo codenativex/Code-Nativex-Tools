@@ -47,6 +47,22 @@ export function getToolsByCategory(category: ToolCategoryId): readonly ToolDefin
   return tools.filter((tool) => tool.category === category);
 }
 
+/**
+ * Agents to suggest alongside `tool`: the same category first, then anything
+ * runnable, then the rest, each group keeping registry order.
+ */
+export function getRelatedTools(tool: ToolDefinition, limit = 3): readonly ToolDefinition[] {
+  const rank = (candidate: ToolDefinition) =>
+    candidate.category === tool.category ? 0 : candidate.runtime !== undefined ? 1 : 2;
+
+  return tools
+    .filter((candidate) => candidate.slug !== tool.slug)
+    .map((candidate, index) => ({ candidate, index }))
+    .sort((a, b) => rank(a.candidate) - rank(b.candidate) || a.index - b.index)
+    .slice(0, limit)
+    .map(({ candidate }) => candidate);
+}
+
 export function getPopulatedCategoryIds(): readonly ToolCategoryId[] {
   return [...new Set(tools.map((tool) => tool.category))];
 }
