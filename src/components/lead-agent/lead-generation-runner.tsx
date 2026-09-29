@@ -2,21 +2,44 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
+import {
+  getAllCitiesOfCountry,
+  getCitiesOfState,
+  getCountries,
+  getStatesOfCountry,
+  type ICity,
+  type ICountry,
+  type IState,
+} from "@countrystatecity/countries-browser";
 
 import { BUSINESS_CATEGORIES, DISCOVERY_SOURCES, LEAD_TYPES, SERVICES, SOURCE_DEFAULTS } from "@/lib/lead-agent/options";
 import type { DiscoverySource, LeadSearchCriteria, LeadRequestStartResponse } from "@/lib/lead-agent/types";
 
 const inputClass =
-  "mt-1.5 w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-sm text-ink outline-none transition focus:border-line-strong";
+  "mt-1.5 w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-sm text-ink outline-none transition focus:border-line-strong disabled:cursor-not-allowed disabled:opacity-60";
+
+const sortByName = <T extends { name: string }>(items: T[]) =>
+  [...items].sort((a, b) => a.name.localeCompare(b.name));
 
 export function LeadGenerationRunner() {
   const router = useRouter();
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState("");
   const [source, setSource] = React.useState<DiscoverySource>("google_maps");
+
+  const [countries, setCountries] = React.useState<ICountry[]>([]);
+  const [states, setStates] = React.useState<IState[]>([]);
+  const [cities, setCities] = React.useState<ICity[]>([]);
+  const [countryIso, setCountryIso] = React.useState("US");
+  const [stateIso, setStateIso] = React.useState("");
   const [country, setCountry] = React.useState("United States");
   const [region, setRegion] = React.useState("");
   const [city, setCity] = React.useState("");
+  const [loadingCountries, setLoadingCountries] = React.useState(true);
+  const [loadingStates, setLoadingStates] = React.useState(false);
+  const [loadingCities, setLoadingCities] = React.useState(false);
+  const [locationError, setLocationError] = React.useState("");
+
   const [radiusKm, setRadiusKm] = React.useState(15);
   const [categories, setCategories] = React.useState<string[]>(["Dentists"]);
   const [service, setService] = React.useState(SOURCE_DEFAULTS.google_maps.service);
@@ -28,6 +51,118 @@ export function LeadGenerationRunner() {
   const [requireDecisionMaker, setRequireDecisionMaker] = React.useState(false);
   const [excludedDomains, setExcludedDomains] = React.useState("");
   const [additionalInstructions, setAdditionalInstructions] = React.useState("");
+
+  React.useEffect(() => {
+    let cancelled = false;
+
+    async function loadCountries() {
+      setLoadingCountries(true);
+      setLocationError("");
+      try {
+        const result = sortByName(await getCountries());
+        if (cancelled) return;
+        setCountries(result);
+        const selected = result.find((item) => item.iso2 === "US");
+        if (selected) setCountry(selected.name);
+      } catch {
+        if (!cancelled) setLocationError("Location data could not be loaded. Refresh the page and try again.");
+      } finally {
+        if (!cancelled) setLoadingCountries(false);
+      }
+    }
+
+    void loadCountries();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  React.useEffect(() => {
+    let cancelled = false;
+
+    async function loadStates() {
+      if (!countryIso) {
+        setStates([]);
+        setCities([]);
+        return;
+      }
+
+      setLoadingStates(true);
+      setLoadingCities(false);
+      setLocationError("");
+      setStates([]);
+      setCities([]);
+      setStateIso("");
+      setRegion("");
+      setCity("");
+
+      try {
+        const result = sortByName(await getStatesOfCountry(countryIso));
+        if (cancelled) return;
+        setStates(result);
+
+        // Some countries do not have state/province data. In that case,
+        // load country-level cities so the city dropdown still works.
+        if (result.length === 0) {
+          setLoadingCities(true);
+          const countryCities = sortByName(await getAllCitiesOfCountry(countryIso));
+          if (!cancelled) setCities(countryCities);
+        }
+      } catch {
+        if (!cancelled) setLocationError("States could not be loaded for the selected country.");
+      } finally {
+        if (!cancelled) {
+          setLoadingStates(false);
+          setLoadingCities(false);
+        }
+      }
+    }
+
+    void loadStates();
+    return () => {
+      cancelled = true;
+    };
+  }, [countryIso]);
+
+  React.useEffect(() => {
+    let cancelled = false;
+
+    async function loadCities() {
+      if (!countryIso || !stateIso) return;
+
+      setLoadingCities(true);
+      setLocationError("");
+      setCities([]);
+      setCity("");
+
+      try {
+        const result = sortByName(await getCitiesOfState(countryIso, stateIso));
+        if (!cancelled) setCities(result);
+      } catch {
+        if (!cancelled) setLocationError("Cities could not be loaded for the selected state.");
+      } finally {
+        if (!cancelled) setLoadingCities(false);
+      }
+    }
+
+    void loadCities();
+    return () => {
+      cancelled = true;
+    };
+  }, [countryIso, stateIso]);
+
+  function changeCountry(value: string) {
+    const selected = countries.find((item) => item.iso2 === value);
+    setCountryIso(value);
+    setCountry(selected?.name ?? "");
+  }
+
+  function changeState(value: string) {
+    const selected = states.find((item) => item.iso2 === value);
+    setStateIso(value);
+    setRegion(selected?.name ?? "");
+    setCity("");
+  }
 
   function changeSource(value: DiscoverySource) {
     setSource(value);
@@ -46,6 +181,10 @@ export function LeadGenerationRunner() {
     setError("");
     if (categories.length === 0) {
       setError("Select at least one business category.");
+      return;
+    }
+    if (!country) {
+      setError("Select a country.");
       return;
     }
 
@@ -86,6 +225,8 @@ export function LeadGenerationRunner() {
     }
   }
 
+  const stateRequiredForCities = states.length > 0;
+
   return (
     <form onSubmit={submit} className="space-y-6">
       <section className="rounded-card border border-line bg-surface p-5 sm:p-6">
@@ -100,19 +241,74 @@ export function LeadGenerationRunner() {
             </select>
           </label>
 
-          <label className="text-sm font-medium text-ink">Country
-            <input className={inputClass} value={country} onChange={(e) => setCountry(e.target.value)} required />
+          <label className="text-sm font-medium text-ink">
+            Country
+            <select
+              className={inputClass}
+              value={countryIso}
+              onChange={(e) => changeCountry(e.target.value)}
+              disabled={loadingCountries}
+              required
+            >
+              <option value="">{loadingCountries ? "Loading countries…" : "Select country"}</option>
+              {countries.map((item) => (
+                <option key={item.iso2} value={item.iso2}>
+                  {item.emoji ? `${item.emoji} ` : ""}{item.name}
+                </option>
+              ))}
+            </select>
           </label>
-          <label className="text-sm font-medium text-ink">Region / State
-            <input className={inputClass} value={region} onChange={(e) => setRegion(e.target.value)} placeholder="Texas" />
+
+          <label className="text-sm font-medium text-ink">
+            Region / State
+            <select
+              className={inputClass}
+              value={stateIso}
+              onChange={(e) => changeState(e.target.value)}
+              disabled={!countryIso || loadingStates || states.length === 0}
+            >
+              <option value="">
+                {loadingStates
+                  ? "Loading states…"
+                  : states.length === 0
+                    ? "No state selection required"
+                    : "Select state / region"}
+              </option>
+              {states.map((item) => (
+                <option key={`${item.countryCode}-${item.iso2}`} value={item.iso2}>{item.name}</option>
+              ))}
+            </select>
           </label>
-          <label className="text-sm font-medium text-ink">City
-            <input className={inputClass} value={city} onChange={(e) => setCity(e.target.value)} placeholder="Dallas" />
+
+          <label className="text-sm font-medium text-ink">
+            City
+            <select
+              className={inputClass}
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              disabled={!countryIso || loadingCities || (stateRequiredForCities && !stateIso)}
+            >
+              <option value="">
+                {loadingCities
+                  ? "Loading cities…"
+                  : stateRequiredForCities && !stateIso
+                    ? "Select a state first"
+                    : "Select city"}
+              </option>
+              {cities.map((item) => (
+                <option key={`${item.id}-${item.name}`} value={item.name}>{item.name}</option>
+              ))}
+            </select>
           </label>
+
           <label className="text-sm font-medium text-ink">Radius (km)
             <input className={inputClass} type="number" min={1} max={500} value={radiusKm} onChange={(e) => setRadiusKm(Number(e.target.value))} />
           </label>
         </div>
+
+        {locationError ? (
+          <p className="mt-3 text-sm text-critical-ink" role="alert">{locationError}</p>
+        ) : null}
       </section>
 
       <section className="rounded-card border border-line bg-surface p-5 sm:p-6">

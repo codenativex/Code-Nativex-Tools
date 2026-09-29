@@ -70,8 +70,8 @@ export interface AuditPageResult {
   findings?: AuditFinding[] | null;
   seo?: Record<string, unknown> | null;
   lighthouse?: {
-    mobile?: { runs?: LighthouseRunResult[] | null; state?: string | null } | null;
-    desktop?: { runs?: LighthouseRunResult[] | null; state?: string | null } | null;
+    mobile?: { runs?: LighthouseRunResult[] | null; selected?: LighthouseRunResult | null; state?: string | null } | null;
+    desktop?: { runs?: LighthouseRunResult[] | null; selected?: LighthouseRunResult | null; state?: string | null } | null;
   } | null;
   [key: string]: unknown;
 }

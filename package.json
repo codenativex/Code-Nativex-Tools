@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@countrystatecity/countries-browser": "^1.0.4",
     "cheerio": "1.1.2",
     "next": "16.3.6",
     "react": "19.3.0",
