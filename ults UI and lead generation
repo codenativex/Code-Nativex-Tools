@@ -1,9 +1,0 @@
- package-lock.json                                  |   7 [32m+[m
- package.json                                       |   1 [32m+[m
- .../lead-generation/[requestId]/leads/route.ts     |  94 [32m++++++++[m[31m-[m
- .../api/tools/lead-generation/[requestId]/route.ts | 123 [32m+++++++++++[m[31m-[m
- src/app/api/tools/lead-generation/route.ts         |  90 [32m++++++++[m[31m-[m
- src/components/audit-agent/audit-live-view.tsx     | 137 [32m+++++++++++[m[31m---[m
- .../lead-agent/lead-generation-runner.tsx          | 210 [32m++++++++++++++++++++[m[31m-[m
- src/lib/audit-agent/types.ts                       |   4 [32m+[m[31m-[m
- 8 files changed, 615 insertions(+), 51 deletions(-)
