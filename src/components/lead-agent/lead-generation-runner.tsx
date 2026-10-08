@@ -275,7 +275,7 @@ export function LeadGenerationRunner() {
                     : "Select state / region"}
               </option>
               {states.map((item) => (
-                <option key={`${item.countryCode}-${item.iso2}`} value={item.iso2}>{item.name}</option>
+                <option key={`${item.country_code}-${item.iso2}`} value={item.iso2}>{item.name}</option>
               ))}
             </select>
           </label>
